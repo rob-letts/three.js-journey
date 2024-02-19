@@ -1,0 +1,19 @@
+{
+  "name": "three.js-journey",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000",
+    "build": "tsc && vite build",
+    "preview": "vite preview --port 3000"
+  },
+  "devDependencies": {
+    "@types/three": "^0.161.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.0"
+  },
+  "dependencies": {
+    "three": "^0.161.0"
+  }
+}
