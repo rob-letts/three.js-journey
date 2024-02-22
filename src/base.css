@@ -19,6 +19,7 @@ html {
 
 body {
   height: 100%;
+  padding: 2rem;
 }
 
 img {
@@ -26,7 +27,7 @@ img {
 }
 
 :where(ul, ol) {
-  list-style: none;
+  list-style: inside;
 }
 
 :where(img, picture, video, iframe, svg) {
