@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-
 const canvas = document.querySelector('.webgl');
 
 function getMesh(color: string): THREE.Mesh {
@@ -16,7 +15,7 @@ const mesh2 = getMesh('blue');
 const mesh3 = getMesh('white');
 
 // Camera
-const sizes = { width: 800, height: 800 }
+const sizes = { width: 750, height: 750 }
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
 
 // Axes helper
@@ -52,8 +51,21 @@ camera.position.set(1, 1, 5);
 camera.lookAt(group.position);
 
 // Renderer
-if (canvas) {
-  const renderer = new THREE.WebGLRenderer({ canvas });
-  renderer.setSize(sizes.width, sizes.height);
+if (!canvas) throw new Error('Canvas not found');
+
+const renderer = new THREE.WebGLRenderer({ canvas });
+renderer.setSize(sizes.width, sizes.height);
+
+const clock = new THREE.Clock();
+tick();
+
+function tick() {
+  const elapsedTime = clock.getElapsedTime();
+  group.rotation.y = Math.sin(elapsedTime) * Math.PI * 2;
+
   renderer.render(scene, camera);
+
+  requestAnimationFrame(tick);
 }
+
+console.log(gsap);
