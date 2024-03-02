@@ -58,3 +58,17 @@ img {
     scroll-behavior: auto !important;
   }
 }
+
+body {
+  text-align: center;
+  background-color: black;
+}
+
+h1 {
+  margin-bottom: 1rem;
+}
+
+.webgl {
+  display: block;
+  margin-inline: auto;
+}
