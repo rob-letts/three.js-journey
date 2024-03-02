@@ -1,3 +1,4 @@
+import gsap from 'gsap';
 import * as THREE from 'three';
 
 const canvas = document.querySelector('.webgl');
