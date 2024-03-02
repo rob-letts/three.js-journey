@@ -58,15 +58,20 @@ const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(sizes.width, sizes.height);
 
 const clock = new THREE.Clock();
+let previousSecond = -1;
 tick();
 
 function tick() {
   const elapsedTime = clock.getElapsedTime();
   group.rotation.y = Math.sin(elapsedTime) * Math.PI * 2;
 
-  renderer.render(scene, camera);
+  const currentSecond = Math.round(elapsedTime)
+  if (currentSecond > previousSecond) {
+    previousSecond = currentSecond;
+    const even = currentSecond % 2 === 0;
+    gsap.to(group.position, { duration: 1, delay: 1, x: even ? 2 : -2 });
+  }
 
+  renderer.render(scene, camera);
   requestAnimationFrame(tick);
 }
-
-console.log(gsap);
