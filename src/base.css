@@ -60,15 +60,12 @@ img {
 }
 
 body {
-  text-align: center;
   background-color: black;
-}
-
-h1 {
-  margin-bottom: 1rem;
 }
 
 .webgl {
   display: block;
   margin-inline: auto;
+  border: 2px solid white;
+  border-radius: 8px;
 }

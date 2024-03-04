@@ -1,7 +1,8 @@
-import gsap from 'gsap';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import gsap from 'gsap';
 
-const canvas = document.querySelector('.webgl');
+const canvas = document.querySelector('.webgl') as HTMLCanvasElement;
 
 function getMesh(color: string): THREE.Mesh {
   return new THREE.Mesh(
@@ -16,7 +17,10 @@ const mesh2 = getMesh('blue');
 const mesh3 = getMesh('white');
 
 // Camera
-const sizes = { width: 750, height: 750 }
+const sizes = {
+  width: 800,
+  height: 600
+}
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
 
 // Axes helper
@@ -36,7 +40,6 @@ scene.add(group);
 
 if (dev) scene.add(axesHelper);
 
-
 // Setup mesh
 mesh1.position.set(-1, 0, 0);
 mesh2.position.set(0, 0, 0);
@@ -45,33 +48,49 @@ mesh3.position.set(1, 0, 0);
 // Setup group
 group.position.set(1, 0, 1);
 group.scale.set(1.5, 0.5, 0.5);
-group.rotation.set(Math.PI * 0.25, Math.PI * 0.25, Math.PI * 0.75);
+// group.rotation.set(Math.PI * 0.25, Math.PI * 0.25, Math.PI * 0.75);
 
 // Setup camera
 camera.position.set(1, 1, 5);
-camera.lookAt(group.position);
+// camera.lookAt(group.position);
+
 
 // Renderer
 if (!canvas) throw new Error('Canvas not found');
 
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
+
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(sizes.width, sizes.height);
 
-const clock = new THREE.Clock();
-let previousSecond = -1;
+// const clock = new THREE.Clock();
 tick();
 
+// window.addEventListener('mousemove', ({ clientX, clientY }) => {
+//   camera.position.x = getPositionX(clientX);
+//   camera.position.z = getPositionZ(clientX);
+//   camera.position.y = getPositionY(clientY);
+//   camera.lookAt(group.position);
+// });
+
 function tick() {
-  const elapsedTime = clock.getElapsedTime();
-  group.rotation.y = Math.sin(elapsedTime) * Math.PI * 2;
-
-  const currentSecond = Math.round(elapsedTime)
-  if (currentSecond > previousSecond) {
-    previousSecond = currentSecond;
-    const even = currentSecond % 2 === 0;
-    gsap.to(group.position, { duration: 1, delay: 1, x: even ? 2 : -2 });
-  }
-
+  // gsap.to(group.position, { duration: 1, delay: 1, x: even ? 2 : -2 });
+  // const elapsedTime = clock.getElapsedTime();
+  // group.rotation.y = Math.sin(elapsedTime) * Math.PI * 2;
+  controls.update();
   renderer.render(scene, camera);
   requestAnimationFrame(tick);
 }
+
+// function getPositionX(x: number): number {
+//   return Math.sin((x / sizes.width - 0.5) * Math.PI * 2) * 3;
+// }
+
+// function getPositionZ(clientX: number): number {
+//   return Math.cos((clientX / sizes.width - 0.5) * Math.PI * 2) * 3;
+// }
+
+// function getPositionY(clientY: number): number {
+//   return (clientY / sizes.height - 0.5) * 5
+// }
