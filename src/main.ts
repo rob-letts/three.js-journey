@@ -2,14 +2,12 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // import gsap from 'gsap';
 
-const canvas = document.querySelector('.webgl') as HTMLCanvasElement;
-
-function getMesh(color: string): THREE.Mesh {
-  return new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color })
-  );
+type Sizes = {
+  width: number,
+  height: number
 }
+
+const canvas = document.querySelector('.webgl') as HTMLCanvasElement;
 
 // Meshes
 const mesh1 = getMesh('orange');
@@ -17,10 +15,30 @@ const mesh2 = getMesh('blue');
 const mesh3 = getMesh('white');
 
 // Camera
-const sizes = {
-  width: 800,
-  height: 600
+const sizes: Sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight
 }
+
+function updateSizes() {
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+}
+
+addEventListener('resize', updateSizes);
+
+addEventListener('dblclick', () => {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    canvas.requestFullscreen();
+  }
+});
+
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
 
 // Axes helper
@@ -81,6 +99,13 @@ function tick() {
   controls.update();
   renderer.render(scene, camera);
   requestAnimationFrame(tick);
+}
+
+function getMesh(color: string): THREE.Mesh {
+  return new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color })
+  );
 }
 
 // function getPositionX(x: number): number {

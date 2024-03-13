@@ -19,7 +19,7 @@ html {
 
 body {
   height: 100%;
-  padding: 2rem;
+  overflow: hidden;
 }
 
 img {
@@ -59,13 +59,8 @@ img {
   }
 }
 
-body {
-  background-color: black;
-}
-
 .webgl {
-  display: block;
-  margin-inline: auto;
-  border: 2px solid white;
-  border-radius: 8px;
+  position: fixed;
+  inset: 0;
+  outline: none;
 }
