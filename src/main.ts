@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// import gsap from 'gsap';
+import GUI from 'lil-gui';
+import gsap from 'gsap';
+
+const gui = new GUI();
 
 type Sizes = {
   width: number,
@@ -13,6 +16,18 @@ const canvas = document.querySelector('.webgl') as HTMLCanvasElement;
 const mesh1 = getMesh('orange');
 const mesh2 = getMesh('blue');
 const mesh3 = getMesh('white');
+
+gui.add(mesh1.position, `y`).min(-3).max(3).step(0.01).name(`mesh1 y`);
+gui.add(mesh1.position, `x`).min(-3).max(3).step(0.01).name(`mesh1 x`);
+gui.add(mesh1, `visible`);
+gui.add(mesh1.material, `wireframe`);
+
+[mesh1, mesh2, mesh3].forEach((mesh, index) => {
+  const name = `mesh${index + 1}`;
+  gui.addColor(mesh.material, `color`).name(`${name} color`).onFinishChange((color: THREE.Color) => {
+    console.log(`${name} color changed to: #${color.getHexString()}`);
+  });
+});
 
 // Camera
 const sizes: Sizes = {
@@ -72,6 +87,13 @@ group.scale.set(1.5, 0.5, 0.5);
 camera.position.set(1, 1, 5);
 // camera.lookAt(group.position);
 
+const animations = {
+  spin: () => {
+    gsap.to(group.rotation, { duration: 1, y: group.rotation.y + Math.PI * 2 });
+  }
+}
+
+gui.add(animations, `spin`);
 
 // Renderer
 if (!canvas) throw new Error('Canvas not found');
@@ -102,9 +124,20 @@ function tick() {
 }
 
 function getMesh(color: string): THREE.Mesh {
+  const count = 500;
+
+  const floats = new Float32Array(count * 3 * 3);
+  floats.forEach((_, index) => floats[index] = (Math.random() - 0.5) * 4);
+
+  const positions = new THREE.BufferAttribute(floats, 3);
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', positions);
+
   return new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color })
+    geometry,
+    // new THREE.BoxGeometry(1, 2, 10, 10, 10, 10),
+    new THREE.MeshBasicMaterial({ color, wireframe: true })
   );
 }
 
