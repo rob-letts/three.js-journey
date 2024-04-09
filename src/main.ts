@@ -2,6 +2,17 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from 'lil-gui';
 import gsap from 'gsap';
+import imageSrc from './assets/door-texture.jpg';
+
+const image = new Image();
+image.src = imageSrc;
+const texture = new THREE.Texture(image);
+
+image.addEventListener('load', () => {
+  texture.needsUpdate = true;
+});
+
+const texturedMaterial = new THREE.MeshBasicMaterial({ map: texture });
 
 const gui = new GUI();
 
@@ -122,6 +133,7 @@ function tick() {
   renderer.render(scene, camera);
   requestAnimationFrame(tick);
 }
+
 
 function getMesh(color: string): THREE.Mesh {
   const count = 500;
